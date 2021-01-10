@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, Button, ScrollView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Colors from '../../constants/Colors';
-import * as cartActions from '../../store/actions';
+import * as cartActions from '../../store/actions/cart';
 
 const ProductDetailScreen = props => {
   const productId = props.navigation.getParam('productId');
