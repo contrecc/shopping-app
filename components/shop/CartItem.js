@@ -1,21 +1,32 @@
-import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Platform } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React from "react";
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Platform,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
-const CartItem = props => {
-  return <View style={styles.cardItem} >
-    <View style={styles.itemData} >
-      <Text style={styles.quantity} >{props.quantity} </Text>
-      <Text style={styles.title} >{props.title}</Text>
+const CartItem = (props) => {
+  return (
+    <View style={styles.cardItem}>
+      <View style={styles.itemData}>
+        <Text style={styles.quantity}>{props.quantity} </Text>
+        <Text style={styles.title}>{props.title}</Text>
+      </View>
+      <View style={styles.itemData}>
+        <Text style={styles.amount}>${props.amount.toFixed(2)}</Text>
+        <TouchableOpacity onPress={props.onRemove} style={styles.deleteButton}>
+          <Ionicons
+            name={Platform.OS === "android" ? "md-trash" : "ios-trash"}
+            size={23}
+            color="red"
+          />
+        </TouchableOpacity>
+      </View>
     </View>
-    <View style={styles.itemData} >
-      <Text style={styles.amount} >${props.amount.toFixed(2)}</Text>
-      <TouchableOpacity onPress={props.onRemove} style={styles.deleteButton} >
-        <Ionicons name={Platform.OS === 'android' ? 'md-trash' : 'ios-trash'} size={23} color="red" />
-      </TouchableOpacity>
-    </View>
-  </View>
-
+  );
 };
 
 const styles = StyleSheet.create({
@@ -24,28 +35,28 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     flexDirection: "row",
     justifyContent: "space-between",
-    marginHorizontal: 20
+    marginHorizontal: 20,
   },
   itemData: {
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
   },
   quantity: {
     fontFamily: "open-sans",
     color: "#888",
-    fontSize: 16
+    fontSize: 16,
   },
   title: {
     fontFamily: "open-sans-bold",
-    fontSize: 16
+    fontSize: 16,
   },
   amount: {
     fontFamily: "open-sans-bold",
-    fontSize: 16
+    fontSize: 16,
   },
   deleteButton: {
-    margin: 20
-  }
+    margin: 20,
+  },
 });
 
 export default CartItem;

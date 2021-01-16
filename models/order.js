@@ -5,6 +5,6 @@ class Order {
     this.totalAmount = totalAmount;
     this.date = date;
   }
-};
+}
 
 export default Order;
