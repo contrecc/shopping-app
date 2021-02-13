@@ -7,14 +7,31 @@ export const deleteProduct = (productId) => {
 };
 
 export const createProduct = (title, description, imageUrl, price) => {
-  return {
-    type: CREATE_PRODUCT,
-    productData: {
-      title: title,
-      description: description,
-      imageUrl: imageUrl,
-      price: price,
-    },
+  return async (dispatch) => {
+    // Can write any asynchronous code here that will complete before sending the action to the store.
+    const response = await fetch(
+      "https://react-native-project-3773e-default-rtdb.firebaseio.com/products.json",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title, description, imageUrl, price }),
+      }
+    );
+
+    const data = await response.json();
+
+    dispatch({
+      type: CREATE_PRODUCT,
+      productData: {
+        id: data.name,
+        title: title,
+        description: description,
+        imageUrl: imageUrl,
+        price: price,
+      },
+    });
   };
 };
 
