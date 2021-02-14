@@ -52,29 +52,38 @@ export const updateProduct = (id, title, description, imageUrl) => {
 
 export const fetchProducts = () => {
   return async (dispatch) => {
-    const response = await fetch(
-      "https://react-native-project-3773e-default-rtdb.firebaseio.com/products.json"
-    );
-    const data = await response.json();
-
-    const loadedProducts = [];
-
-    for (const key in data) {
-      loadedProducts.push(
-        new Product(
-          key,
-          "u1",
-          data[key].title,
-          data[key].imageUrl,
-          data[key].description,
-          data[key].price
-        )
+    try {
+      const response = await fetch(
+        "https://react-native-project-3773e-default-rtdb.firebaseio.com/products.json"
       );
-    }
 
-    dispatch({
-      type: SET_PRODUCTS,
-      products: loadedProducts,
-    });
+      if (!response.ok) {
+        throw new Error("Something went wrong!");
+      }
+
+      const data = await response.json();
+
+      const loadedProducts = [];
+
+      for (const key in data) {
+        loadedProducts.push(
+          new Product(
+            key,
+            "u1",
+            data[key].title,
+            data[key].imageUrl,
+            data[key].description,
+            data[key].price
+          )
+        );
+      }
+
+      dispatch({
+        type: SET_PRODUCTS,
+        products: loadedProducts,
+      });
+    } catch (error) {
+      throw error;
+    }
   };
 };
