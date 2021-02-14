@@ -7,12 +7,16 @@ export const SET_PRODUCTS = "SET_PRODUCTS";
 
 export const deleteProduct = (productId) => {
   return async (dispatch) => {
-    await fetch(
+    const response = await fetch(
       `https://react-native-project-3773e-default-rtdb.firebaseio.com/products/${productId}.json`,
       {
         method: "DELETE",
       }
     );
+
+    if (!response.ok) {
+      throw new Error("An error occurred when deleting a product.");
+    }
     dispatch({ type: DELETE_PRODUCT, pid: productId });
   };
 };
@@ -31,6 +35,10 @@ export const createProduct = (title, description, imageUrl, price) => {
       }
     );
 
+    if (!response.ok) {
+      throw new Error("An error occurred when creating a new product.");
+    }
+
     const data = await response.json();
 
     dispatch({
@@ -48,7 +56,7 @@ export const createProduct = (title, description, imageUrl, price) => {
 
 export const updateProduct = (id, title, description, imageUrl) => {
   return async (dispatch) => {
-    await fetch(
+    const response = await fetch(
       `https://react-native-project-3773e-default-rtdb.firebaseio.com/products/${id}.json`,
       {
         method: "PATCH",
@@ -62,6 +70,11 @@ export const updateProduct = (id, title, description, imageUrl) => {
         }),
       }
     );
+
+    if (!response.ok) {
+      throw new Error("An error occurred when updating the product.");
+    }
+
     dispatch({
       type: UPDATE_PRODUCT,
       pid: id,
