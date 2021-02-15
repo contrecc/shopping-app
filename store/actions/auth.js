@@ -19,7 +19,14 @@ export const signup = (email, password) => {
     );
 
     if (!response.ok) {
-      throw new Error("An error occurred during signup");
+      const errorResponse = await response.json();
+      const errorMessage = errorResponse.error.message;
+      let message = "Something went wrong while signing up.";
+
+      if (errorMessage === "EMAIL_EXISTS") {
+        message = "This email is already taken.";
+      }
+      throw new Error(message);
     }
 
     const data = await response.json();
@@ -47,7 +54,16 @@ export const login = (email, password) => {
     );
 
     if (!response.ok) {
-      throw new Error("An error occurred during login");
+      const errorResponse = await response.json();
+      const errorMessage = errorResponse.error.message;
+      let message = "Something went wrong while logging in";
+
+      if (errorMessage === "EMAIL_NOT_FOUND") {
+        message = "This email could not be found.";
+      } else if (errorMessage === "INVALID_PASSWORD") {
+        message = "You have entered an invalid password.";
+      }
+      throw new Error(message);
     }
 
     const data = await response.json();
