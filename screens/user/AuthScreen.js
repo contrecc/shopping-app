@@ -160,8 +160,8 @@ const AuthScreen = (props) => {
   );
 };
 
-AuthScreen.navigationOptions = {
-  headerTitle: "Authenticate",
+export const authScreenOptions = (navData) => {
+  return { headerTitle: "Authenticate" };
 };
 
 const styles = StyleSheet.create({
