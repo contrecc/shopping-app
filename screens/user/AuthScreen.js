@@ -82,7 +82,6 @@ const AuthScreen = (props) => {
     setIsLoading(true);
     try {
       await dispatch(action);
-      props.navigation.navigate("Shop");
     } catch (error) {
       setError(error.message);
       setIsLoading(false);
@@ -103,8 +102,8 @@ const AuthScreen = (props) => {
 
   return (
     <KeyboardAvoidingView
-      behavior="padding"
-      keyboardVerticalOffset={50}
+      behavior={Platform.OS === "ios" ? "padding" : null}
+      keyboardVerticalOffset={Platform.select({ ios: 0, android: 500 })}
       style={styles.screen}
     >
       <LinearGradient colors={["#ffedff", "#ffe3ff"]} style={styles.gradient}>

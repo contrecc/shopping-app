@@ -12,7 +12,8 @@ const StartupScreen = (props) => {
       try {
         const userData = await AsyncStorage.getItem("userData");
         if (userData === null) {
-          props.navigation.navigate("Auth");
+          // props.navigation.navigate("Auth");
+          dispatch(authActions.setDidTryAutoLogin());
           return;
         }
         const transformedData = JSON.parse(userData);
@@ -20,13 +21,14 @@ const StartupScreen = (props) => {
         const expirationDate = new Date(expiryDate);
 
         if (expirationDate <= new Date() || !token || !userId) {
-          props.navigation.navigate("Auth");
+          // props.navigation.navigate("Auth");
+          dispatch(authActions.setDidTryAutoLogin());
           return;
         }
 
         const expirationTime = expirationDate.getTime() - new Date().getTime();
 
-        props.navigation.navigate("Shop");
+        // props.navigation.navigate("Shop");
         dispatch(authActions.authenticate(token, userId, expirationTime));
       } catch (error) {
         throw error;
