@@ -1,4 +1,6 @@
 import Product from "../../models/product";
+import * as Notifications from "expo-notifications";
+import * as Permissions from "expo-permissions";
 
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const CREATE_PRODUCT = "CREATE_PRODUCT";
@@ -27,6 +29,23 @@ export const createProduct = (title, description, imageUrl, price) => {
     const token = getState().auth.token;
     const userId = getState().auth.userId;
     // Can write any asynchronous code here that will complete before sending the action to the store.
+    let pushToken;
+    const statusObject = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+    if (statusObject.status !== "granted") {
+      const updatedStatusObject = await Permissions.askAsync(
+        Permissions.NOTIFICATIONS
+      );
+      if (updatedStatusObject !== "granted") {
+        pushToken = null;
+      } else {
+        const updatedResponse = await Notifications.getExpoPushTokenAsync();
+        pushToken = updatedResponse.data;
+      }
+    } else {
+      const response = await Notifications.getExpoPushTokenAsync();
+      pushToken = response.data;
+    }
+
     const response = await fetch(
       `https://react-native-project-3773e-default-rtdb.firebaseio.com/products.json?auth=${token}`,
       {
@@ -40,6 +59,7 @@ export const createProduct = (title, description, imageUrl, price) => {
           imageUrl,
           price,
           ownerId: userId,
+          ownerPushToken: pushToken,
         }),
       }
     );
@@ -59,6 +79,7 @@ export const createProduct = (title, description, imageUrl, price) => {
         imageUrl: imageUrl,
         price: price,
         ownerId: userId,
+        pushToken: pushToken,
       },
     });
   };
@@ -119,6 +140,7 @@ export const fetchProducts = () => {
           new Product(
             key,
             data[key].ownerId,
+            data[key].ownerPushToken,
             data[key].title,
             data[key].imageUrl,
             data[key].description,

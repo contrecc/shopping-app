@@ -11,8 +11,15 @@ import AppNavigator from "./navigation/AppNavigator";
 import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
 import { LogBox } from "react-native";
+import * as Notifications from "expo-notifications";
 
 LogBox.ignoreAllLogs(true);
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => {
+    return { shouldShowAlert: true };
+  },
+});
 
 const rootReducer = combineReducers({
   products: productsReducer,
